@@ -1,0 +1,78 @@
+@model BuildingAgency.Models.Contract
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Contract</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Payment Method
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentMethod)
+        </dd>
+        <dt>
+            Already paid
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Paid)
+        </dd>
+        <dt>
+            Rent starts
+        </dt>
+        <dd>
+            @Model.RentStart.ToShortDateString()
+        </dd>
+        <dt>
+            Rent ends
+        </dt>
+        <dd>
+            @Model.RentFinish.ToShortDateString()
+        </dd>
+        <dt>
+            Rent cost
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rent)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Deposit)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Deposit)
+        </dd>
+        <dt>
+            Duration (in days)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+        <dt>
+            Client passport
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Client.ClientPassportNo)
+        </dd>
+        <dt>
+            Property No
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Property.PropertyNo)
+        </dd>
+        <dt>
+            City
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Property.City)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ContractId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

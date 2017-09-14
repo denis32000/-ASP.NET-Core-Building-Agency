@@ -1,0 +1,192 @@
+CREATE OR REPLACE FUNCTION validateDates(todayDate DATE, startDate DATE, endDate DATE) RETURNS bool AS 
+$$
+      BEGIN
+
+	IF startDate < todayDate 
+		THEN  RETURN FALSE;
+	END IF;
+	
+	IF endDate <= startDate
+		THEN RETURN FALSE;
+	END IF;
+        
+	RETURN TRUE;
+
+      END
+$$ 
+LANGUAGE plpgsql;
+
+
+
+CREATE TABLE "PrivateOwner" (
+	"OwnerId"			Serial		NOT NULL	PRIMARY KEY,
+        "OwnerPassportNo"               CHAR(8)        	NOT NULL,
+        "FullName"                      varchar         NOT NULL,
+        "PhoneNumber"			CHAR(15)	NOT NULL,
+        "City"				varchar	   	NOT NULL,
+        "Street"                       	varchar         NOT NULL                
+);
+
+CREATE TABLE "Staff" (
+        "StaffId"	                Serial  	NOT NULL 	PRIMARY KEY,
+        "StaffPassportNo"               CHAR(8)  	NOT NULL,
+        "FullName"                      varchar		NOT NULL,
+        "Position"                 	varchar         NOT NULL,
+        "Sex"                 		CHAR(1)      	NOT NULL,
+	"DateOfBirth"			DATE		NOT NULL,
+	"Salary"			Float		NOT NULL,
+	"SuperviserId"			INT              		REFERENCES "Staff"      ON UPDATE CASCADE
+);
+
+CREATE TABLE "PropertyForRent" (
+        "PropertyId"                    Serial  	NOT NULL     	PRIMARY KEY,
+        "PropertyNo"                    varchar  	NOT NULL,
+        "City"				varchar		NOT NULL,
+        "Street"                       	varchar         NOT NULL,  
+	"PostCode"			CHAR(6)		NOT NULL,
+	"Type"				varchar		NOT NULL,
+	"Rooms"				INT		NOT NULL,
+	"Rent"				Float		NOT NULL,
+        "OwnerId"               	INT                     	REFERENCES "PrivateOwner" ON UPDATE CASCADE  ON DELETE CASCADE, 
+        "OverseesById"               	INT                     	REFERENCES "Staff" ON UPDATE CASCADE  ON DELETE CASCADE
+); 
+
+CREATE TABLE "Client" (
+	"ClientId"      	        Serial   	NOT NULL        PRIMARY KEY,
+	"ClientPassportNo"              CHAR(8)     	NOT NULL,
+        "FullName"                      varchar        	NOT NULL,  
+	"PhoneNumber"			CHAR(15)	NOT NULL,
+        "PrefType"                      varchar         NOT NULL,
+        "MaxRent"                      	Float        	NOT NULL                 
+);
+
+CREATE TABLE "Viewing" (
+	"ViewNo" 		        SERIAL 		NOT NULL        PRIMARY KEY,
+	"ClientId"              	INT     	NOT NULL        REFERENCES "Client" ON UPDATE CASCADE,
+	"PropertyId"                    INT	    	NOT NULL        REFERENCES "PropertyForRent" ON UPDATE CASCADE,
+	"ViewDate"			DATE		NOT NULL,
+	"Comment"			varchar		NOT NULL     
+);
+
+CREATE TABLE "Contract" (
+	"ContractId"			SERIAL		NOT NULL	PRIMARY KEY,
+	"PropertyId"			INT            	NOT NULL	REFERENCES "PropertyForRent" ON UPDATE CASCADE,             
+	"PaymentMethod"			varchar		NOT NULL,    
+	"Paid"				BOOL		NOT NULL,     
+	"RentStart"			DATE		NOT NULL,    
+	"RentFinish"			DATE		NOT NULL, 
+	"Rent"				Float		NOT NULL,     
+	"Deposit"			Float		NOT NULL,   
+        "ClientId"              	INT                   		REFERENCES "Client" ON UPDATE CASCADE,
+	"Duration"			INT		NOT NULL
+);
+
+CREATE TABLE "Role" (
+	"Id"			SERIAL  		NOT NULL	PRIMARY KEY,
+	"Name"			text			NOT NULL
+);
+
+CREATE TABLE "User" (
+	"Id"			SERIAL  		NOT NULL	PRIMARY KEY,
+	"Email"			varchar			NOT NULL,
+	"Passport"		CHAR(8)			NOT NULL,
+	"Password"		varchar			NOT NULL,
+	"ClientId"    		INTEGER    REFERENCES "Client",
+	"OwnerId"    		INTEGER    REFERENCES "PrivateOwner",
+	"StaffId"    		INTEGER    REFERENCES "Staff",
+	"RoleId"    		INTEGER    REFERENCES "Role"
+);
+
+
+
+INSERT INTO "PrivateOwner" ("OwnerPassportNo", "FullName", "PhoneNumber", "City", "Street") VALUES
+    ('PO738456', 'Иванов Иван Иванович',           '+38(050)6543125', 'Киев',     'пр.Добра, 44, кв. 5' ),
+    ('PO326760', 'Петров Сергей Николаивеч',  	 '+38(066)6456725', 'Донецк',   'ул.Головатого, 7'    ),
+    ('PO745631', 'Николаев Петр Васильевич'        ,  '+38(067)1534678', 'Чернигов', 'пр.Победы,12, кв 1' ),
+    ('PO321567', 'Красильников Георгий Аркадьевич' ,  '+38(095)3467345', 'Николаев', 'пр.Гертруды, 2/3'    ),
+    ('PO765890', 'Белозёров Игнатий Ростиславович' ,  '+38(063)4598214', 'Донецк',   'пр.Негала, 42/3'     ),
+    ('PO436890', 'Абрамова Клавдия Иринеевна'      ,  '+38(068)4356790', 'Донецк',   'ул.Простая, 22/3'    ),
+    ('PO123789', 'Горбунов Константин Валерьевич'  ,  '+38(099)4367891', 'Чернигов', 'пр.Добра, 44, кв 11' ),
+    ('PO459876', 'Воронов Евсей Аркадьевич'        ,  '+38(073)1547097', 'Одесса',   'ул.Дворовая, 14'     ),
+    ('PO134567', 'Евсеев Яков Даниилович'          ,  '+38(098)1034553', 'Николаев', 'ул.Генерала, 33/6'   ),
+    ('PO708304', 'Максимова Елена Васильевна '     ,  '+38(050)1715345', 'Одесса',   'ул.Забудько, 18А'    );
+
+INSERT INTO "Staff" ("StaffPassportNo", "FullName", "Position", "Sex", "DateOfBirth", "Salary", "SuperviserId") VALUES
+    ('CT738456', 'Иванов Иван Иванович'        ,  'Директор',  'м', '20-04-1990', '1000', NULL),
+    ('CT326760', 'Петров Сергей Николаивеч'        ,  'Менеджер',  'м', '14-02-1990', '400', NULL),
+    ('CT745631', 'Николаев Петр Васильевич'        ,  'Инспектор', 'м', '10-12-1980', '200', NULL),
+    ('CT321567', 'Красильников Георгий Аркадьевич' ,  'Инспектор', 'м', '05-11-1988', '220', NULL),
+    ('CT765890', 'Белозёров Игнатий Ростиславович' ,  'Ассистент', 'м', '16-01-1992', '140',  '7'),
+    ('CT436890', 'Абрамова Клавдия Иринеевна'      ,  'Ассистент', 'ж', '22-06-1968', '150',  '3'),
+    ('CT123789', 'Горбунов Константин Валерьевич'  ,  'Менеджер',  'м', '30-09-1966', '580', NULL),
+    ('CT459876', 'Воронов Евсей Аркадьевич'        ,  'Инспектор', 'м', '13-10-1985', '340', NULL),
+    ('CT134567', 'Евсеев Яков Даниилович'          ,  'Ассистент', 'м', '26-02-1991', '200',  '4'),
+    ('CT708304', 'Максимова Елена Васильевна '     ,  'Ассистент', 'ж', '25-08-1979', '150',  '5');
+
+INSERT INTO "PropertyForRent" ("PropertyNo", "City", "Street", "PostCode","Type","OwnerId", "Rooms", "Rent", "OverseesById") VALUES
+  ('0', 'Киев',     'пр.Победы,12, кв 1',   151617, 'квартира',     '7', 3, 100,    '7'),
+  ('1', 'Киев',     'пр.Добра, 44, кв 5', 	181618, 'квартира', 	'3', 2, 85,	    '3'),
+  ('2', 'Киев',     'пр.Гертруды, 2/3', 	201617, 'дача', 	    '8', 5, 240,	'7'),
+  ('3', 'Николаев', 'ул.Генерала, 33/6', 	301614, 'дача', 	    '4', 2, 55,	    '3'),
+  ('4', 'Николаев', 'ул.Дворовая, 14', 		351117, 'офис', 	    '9', 7, 210,	'7'),
+  ('5', 'Харьков',  'ул.Шавальт, 72, кв 16',	381612, 'дача', 	'2', 1, 40,	    '4'),
+  ('6', 'Донецк',   'ул.Лестана, 21/3', 	421617, 'квартира', 	'3', 1, 15,	    '1'),
+  ('7', 'Львов',    'ул.Ясина, 82, кв 24',  	451215, 'паркинг', 	'1', 1, 121,	'4'),
+  ('8', 'Одесса',   'пр.Синатра, 5/3', 		501617, 'квартира', 	'5', 1, 67,	    '1'),
+  ('9', 'Одесса',   'ул.Ярмола, 2Г, кв 9', 	551914, 'офис', 	    '6', 5, 120,	'7'),
+  ('10', 'Чернигов', 'пр.Дмитров, 14А, кв 6',	601618, 'квартира', '4', 2, 95,	    '2'),
+  ('11', 'Киев',     'ул.Простая, 22/3', 	651613, 'дом', 		    '10', 5, 190,	'1'),
+  ('12', 'Одесса',   'ул.Головатого, 7', 	801614, 'дом', 		    '9', 6, 230,	'5');
+
+INSERT INTO "Client" ("ClientPassportNo", "FullName", "PhoneNumber", "PrefType", "MaxRent") VALUES
+    ('CL153673', 'Дементьев Гордей Авксентьевич',   '+38(050)1234567', 'дача',        230),
+    ('CL857848', 'Корнилов Всеволод Кимович',       '+38(066)1234567', 'квартира', 	140),
+    ('CL822848', 'Сибиряк Всеволод Валерьевич',     '+38(066)1634567', 'квартира', 	180),
+    ('CL950432', 'Пестова Ия Лукьяновна',           '+38(067)1234567', 'квартира', 	200),
+    ('CL857348', 'Селиверстова Евпраксия Ефимовна', '+38(095)1234567', 'паркинг', 	20),
+    ('CL639305', 'Ширяева София Владленовна',       '+38(063)1234567', 'дача', 	600),
+    ('CL957032', 'Данилова Тамара Святославовна',   '+38(068)1234567', 'дом', 		230),
+    ('CL743345', 'Лебедев Виталий Васильевич',      '+38(099)1234567', 'квартира',	199),
+    ('CL085734', 'Попова Анастасия Александровна',  '+38(073)1234567', 'квартира', 	230),
+    ('CL345672', 'Юдин Пётр Викторович',            '+38(098)1234567', 'квартира', 	900),
+    ('CL097432', 'Маслов Мэлс Евгеньевич',          '+38(050)1712345', 'дача', 	740),
+    ('CL097747', 'Молчанов Даниил Ярославович',     '+38(091)7495934', 'паркинг', 	90),
+    ('CL093579', 'Нестеров Геласий Митрофанович',   '+38(094)7699421', 'дом', 		205),
+    ('CL093574', 'Нестерова Геласия Митрофановична','+38(094)7699421', 'дом', 		205),
+    ('CL238495', 'Кононов Илья Алексеевич',         '+38(056)9394923', 'квартира', 	185);
+
+
+INSERT INTO "Viewing" ("ClientId", "PropertyId", "ViewDate", "Comment") VALUES
+    (6, 2, '20-04-2015', 'Запах газа.'),
+    (8, 6, '10-10-2016', 'Большое количество бездомных животных в окрестностях-'),
+    (4, 9, '25-06-2016', 'В окрестности нет парковки для автомобиля-'),
+    (3, 4, '11-12-2016', 'Состояние уборной неудовлетворительное-'),
+    (2, 12, '22-02-2015', 'Проблемы с вентиляцией помещения-'),
+    (3, 1, '25-11-2016', ''),
+    (3, 7, '28-02-2016', ''),
+    (1, 7, '16-07-2016', 'Запах нечистот из душника-'),
+    (7, 7, '18-05-2015', 'Не понравилась планировка-'),
+    (6, 11, '26-10-2014', 'Агрессивно настроенные соседи-'),
+    (4, 8, '27-04-2014', 'Слишком мало магазинов в округе-'),
+    (7, 5, '21-09-2016', 'Устаревшгий экстерьер здания-'),
+    (5, 10, '19-11-2015', 'Много шума от проходящей рядом автострады-'),
+    (4, 3, '04-05-2016', 'Не устроила цена аренды-'),
+    (6, 3, '06-05-2016', 'Не устроила цена аренды2-');
+
+INSERT INTO "Contract" ("PropertyId", "PaymentMethod", "Paid", "RentStart", "RentFinish", "Rent", "Deposit", "ClientId", "Duration") VALUES
+
+    (5, 'наличные', true, '02.01.2016', '21.10.2016', 63,  27,  1, 2),
+    (9, 'банковский перевод', false, '03.09.2016', '15.10.2016',  160, 50,  4, 5),
+    (11, 'карточкой', true, '15.10.2016', '23.12.2016',  260, 69,  3, 22),
+    (4, 'наличные', true, '03.03.2016', '05.10.2016',  160, 100,   2, 1),
+    (6, 'наличные', false, '27.04.2016', '27.05.2016',  250, 70,   5, 12),
+    (1, 'карточкой', true, '13.06.2016', '28.07.2016',  227, 40,   6, 5),
+    (2, 'наличные', true, '01.01.2016', '09.04.2016',  539, 140,  8, 3),   
+    (3, 'наличные', true, '07-05-2016', '04.10.2016',  141, 50,   7, 2),   
+    (7, 'наличные', false, '11.11.2016', '03.03.2017',  426, 160, 9, 11),  
+    (8, 'банковский перевод', true, '12.12.2016', '13.01.2017',  165, 33,  10, 9),   
+    (12, 'банковский перевод', true, '02.02.2016', '04.03.2016',  313, 32,  7, 8), 
+    (10, 'наличные', false, '19-11-2015', '16.01.2017',  300, 70,  3, 2);
+
+  
+  

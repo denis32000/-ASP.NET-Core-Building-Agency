@@ -1,0 +1,48 @@
+@model BuildingAgency.Models.Client
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Client</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Client passport
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ClientPassportNo)
+        </dd>
+        <dt>
+            Client's full name
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt>
+            Phone number
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            Preferable type
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PrefType)
+        </dd>
+        <dt>
+            Max rent
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaxRent)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ClientId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

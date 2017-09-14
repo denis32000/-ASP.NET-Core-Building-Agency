@@ -1,0 +1,75 @@
+@model IEnumerable<BuildingAgency.Models.PropertyForRent>
+
+@{
+    ViewData["Title"] = "Properties";
+}
+
+
+<p />
+<a asp-controller="Account" asp-action="ControllPanel">Back to Control Panel</a>
+<hr />
+
+<div class="row main-block">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PropertyNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Street)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PostCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rooms)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OverseesBy)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PropertyNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Street)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PostCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rooms)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OverseesBy.FullName)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

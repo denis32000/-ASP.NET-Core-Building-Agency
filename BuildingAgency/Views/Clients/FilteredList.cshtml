@@ -1,0 +1,54 @@
+@model IEnumerable<BuildingAgency.Models.Client>
+
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    Client passport
+                </th>
+                <th>
+                    Client's full name
+                </th>
+                <th>
+                    Phone number
+                </th>
+                <th>
+                    Preferable type
+                </th>
+                <th>
+                    Max rent
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientPassportNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrefType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxRent)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ClientId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ClientId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ClientId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

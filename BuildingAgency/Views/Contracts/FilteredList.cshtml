@@ -1,0 +1,86 @@
+@model IEnumerable<BuildingAgency.Models.Contract>
+
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Contract No
+            </th>
+            <th>
+                Payment method
+            </th>
+            <th>
+                Deposit was paid
+            </th>
+            <th>
+                Rent starts
+            </th>
+            <th>
+                Rent ends
+            </th>
+            <th>
+                Rent cost
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deposit)
+            </th>
+            <th>
+                Duration (in days)
+            </th>
+            <th>
+                Client passport
+            </th>
+            <th>
+                Property No
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentMethod)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Paid)
+                </td>
+                <td>
+                    @item.RentStart.ToShortDateString()
+                </td>
+                <td>
+                    @item.RentFinish.ToShortDateString()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Deposit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.ClientPassportNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Property.PropertyNo)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ContractId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ContractId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ContractId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,147 @@
+@model IEnumerable<BuildingAgency.Models.PropertyForRent>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>List of all valid properties you can rent</h2>
+
+<p />
+    <div>
+        <a asp-controller="Account" asp-action="ControllPanel">Back to Controll Panel</a>
+    </div>
+
+<div>
+    <div class="form-group">
+
+        <label class="col-md-2 control-label">Sort by</label>
+        <div class="col-md-2">
+            <select id="SortParam" class="form-control">
+                @for (int i = 0; i < ViewBag.SortParams.Count; i++)
+                {
+                    <option>@ViewBag.SortParams[i]</option>
+                }
+            </select>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Set search Params <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><div class="form-group"><label class="control-label">@ViewBag.SearchParams[0]</label><input id="zero" class="form-control" /></div></li>
+                <li><div class="form-group"><label class="control-label">@ViewBag.SearchParams[1]</label><input id="first" class="form-control" /></div></li>
+                <li><div class="form-group"><label class="control-label">@ViewBag.SearchParams[2]</label><input id="second" class="form-control" /></div></li>
+                <li><div class="form-group"><label class="control-label">@ViewBag.SearchParams[3]</label><input id="third" class="form-control" /></div></li>
+                @if (User.IsInRole("admin"))
+                {
+                    <li><div class="form-group"><label class="control-label">@ViewBag.SearchParams[4]</label><input id="fourth" class="form-control" /></div></li>
+                    <li><div class="form-group"><label class="control-label">@ViewBag.SearchParams[5]</label><input id="fifth" class="form-control" /></div></li>
+                }
+                else
+                {
+                    <li><div hidden="hidden" class="form-group"><label class="control-label">@ViewBag.SearchParams[4]</label><input id="fourth" class="form-control" /></div></li>
+                    <li><div hidden="hidden" class="form-group"><label class="control-label">@ViewBag.SearchParams[5]</label><input id="fifth" class="form-control" /></div></li>
+                }
+                <!--
+                <li><div class="form-group"><label class="control-label">Raz Dva</label><input name="one" class="form-control" /></div></li>
+                <li><label></label></li>
+                <li><label></label></li>
+                <li><label></label></li>-->
+            </ul>
+        </div>
+
+        <button class="btn btn-primary"
+                onclick="ajaxExtendedSearch2('PropertyForRents',
+        document.getElementById('SortParam').selectedIndex,
+        $('#zero').val(), $('#first').val(), $('#second').val(),
+        $('#third').val(),$('#fourth').val(),$('#fifth').val());"> Apply Filters </button>
+
+        <a asp-controller="ValidPropertiesList" asp-action="Index" class="btn btn-default">Reset Filters</a>
+    </div>
+</div>
+
+<div class="row main-block">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PropertyNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Street)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PostCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rooms)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rent)
+                </th>
+                @if (User.IsInRole("admin"))
+                {
+                <th>
+                    @Html.DisplayNameFor(model => model.OverseesBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Owner)
+                </th>
+                }   
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PropertyNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Street)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PostCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rooms)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rent)
+                    </td>
+
+                    @if (User.IsInRole("admin"))
+                    {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OverseesBy.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.FullName)
+                    </td>
+                        <td>
+                            <a asp-controller="Contracts" asp-action="ConcludeContract" asp-route-id="@item.PropertyId">Conclude new contract</a>
+                        </td>
+                    }
+                    <td>
+                        <a asp-controller="Viewings" asp-action="ShowComments" asp-route-id="@item.PropertyId">Show comments</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

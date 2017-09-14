@@ -1,0 +1,40 @@
+@model BuildingAgency.Models.Viewing
+
+@{
+    ViewData["Title"] = "Leave comment";
+}
+
+<h2>Details</h2>
+
+<div>
+
+    <h4>Leave a comment about your experience</h4>
+    <hr />
+
+    <form asp-action="CreateComment">
+        <div class="form-horizontal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="ClientId" class="form-control" value="@ViewBag.ClientId"/>
+            <input type="hidden" asp-for="PropertyId" class="form-control" value="@ViewBag.PropertyId" />
+            <input type="hidden" asp-for="ViewDate" class="form-control" value="@DateTime.Now.ToShortDateString()" />
+
+            <div class="form-group">
+                <label asp-for="Comment" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Comment" class="form-control" />
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Send" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+<div>
+    <a asp-controller="Contracts" asp-action="UserContracts">Back to List</a>
+</div>

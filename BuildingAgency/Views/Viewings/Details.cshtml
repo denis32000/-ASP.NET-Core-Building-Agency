@@ -1,0 +1,42 @@
+@model BuildingAgency.Models.Viewing
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Viewing</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ViewDate)
+        </dt>
+        <dd>
+            @Model.ViewDate.ToShortDateString()
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Client)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Client.ClientPassportNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Property)
+        </dt>
+        <dd>
+            ¹@Html.DisplayFor(model => model.Property.PropertyNo) , @Html.DisplayFor(model => model.Property.City)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ViewNo">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

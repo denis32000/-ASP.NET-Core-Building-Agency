@@ -1,0 +1,56 @@
+@model IEnumerable<BuildingAgency.Models.Viewing>
+
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Property)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @item.ViewDate.ToShortDateString()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.ClientPassportNo)
+                </td>
+                <td>
+                    ¹@Html.DisplayFor(modelItem => item.Property.PropertyNo) , @Html.DisplayFor(modelItem => item.Property.City)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ViewNo">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ViewNo">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ViewNo">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+
+

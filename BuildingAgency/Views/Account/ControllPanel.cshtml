@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Controll Panel";
+}
+<ul class="admin-panel-list">
+    @if (User.IsInRole("admin"))
+    {
+        <li><a asp-area="" asp-controller="Clients" asp-action="Index">Clients</a></li>
+        <li><a asp-area="" asp-controller="Contracts" asp-action="Index">Contracts</a></li>
+        <li><a asp-area="" asp-controller="PrivateOwners" asp-action="Index">Private Owners</a></li>
+        <li><a asp-area="" asp-controller="PropertyForRents" asp-action="Index">Properties For Rent</a></li>
+        <li><a asp-area="" asp-controller="Staffs" asp-action="Index">Staff</a></li>
+        <li><a asp-area="" asp-controller="Viewings" asp-action="Index">Viewings</a></li>
+    }
+
+    <li><a asp-area="" asp-controller="PropertyForRents" asp-action="ValidPropertiesList">Valid properties</a></li>
+    <li><a asp-area="" asp-controller="Contracts" asp-action="UserContracts">My contracts</a></li>
+    <li><a asp-area="" asp-controller="PropertyForRents" asp-action="UserProperties">My properties</a></li>
+    <li><a asp-area="" asp-controller="Account" asp-action="UserInfo">My info</a></li>
+</ul>
+

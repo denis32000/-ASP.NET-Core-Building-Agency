@@ -1,0 +1,98 @@
+@model IEnumerable<BuildingAgency.Models.Client>
+
+@{
+    ViewData["Title"] = "Clients";
+}
+
+<p/>
+    <a asp-controller="Account" asp-action="ControllPanel">Back to Control Panel</a>
+<hr/>
+
+<div>
+    <div class="form-group">
+
+        <label class="col-md-2 control-label">Sort by</label>
+        <div class="col-md-2">
+            <select id="SortParam" class="form-control">
+                @for (int i = 0; i < ViewBag.SortParams.Count; i++)
+                {
+                    <option>@ViewBag.SortParams[i]</option>
+                }
+            </select>
+        </div>
+
+        <label class="col-md-2 control-label">Search by</label>
+        <div class="col-md-2">
+            <select id="SearchParam" class="form-control">
+                @for (int i = 0; i < ViewBag.SearchParams.Count; i++)
+                {
+                    <option>@ViewBag.SearchParams[i]</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <input id="SearchInput" class="form-control" placeholder="Looking for..."/>
+        </div>
+
+        
+        <button class="btn btn-primary" onclick="ajaxApplyFilters('Clients', document.getElementById('SortParam').selectedIndex, document.getElementById('SearchParam').selectedIndex, $('#SearchInput').val());">Apply Filters</button>
+        <a asp-controller="Clients" asp-action="Index" class="btn btn-default">Reset Filters</a>
+        <a asp-action="Create" class="btn btn-success">Create New</a>
+    </div>
+</div>
+
+<div class="row main-block">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Client passport
+                </th>
+                <th>
+                    Client's full name
+                </th>
+                <th>
+                    Phone number
+                </th>
+                <th>
+                    Preferable type
+                </th>
+                <th>
+                    Max rent
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientPassportNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrefType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaxRent)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ClientId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ClientId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ClientId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+

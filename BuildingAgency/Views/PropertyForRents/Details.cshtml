@@ -1,0 +1,72 @@
+@model BuildingAgency.Models.PropertyForRent
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PropertyForRent</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PropertyNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PropertyNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Street)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Street)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PostCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PostCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Rooms)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rooms)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Rent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rent)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OverseesBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OverseesBy.FullName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Owner)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Owner.City)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.PropertyId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

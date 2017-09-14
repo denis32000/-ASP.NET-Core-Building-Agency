@@ -1,0 +1,91 @@
+@model BuildingAgency.Models.Contract
+
+@{
+    ViewData["Title"] = "Conclude Contract";
+}
+
+<h2>Create</h2>
+
+<form asp-action="ConcludeContract">
+    <div class="form-horizontal">
+        <h4>Contract</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="PropertyId" class="col-md-2 control-label">Property No</label>
+            <div class="col-md-10">
+                <input type="hidden" asp-for="PropertyId" value="@Model.PropertyId" />
+                <input class="form-control" value="@ViewBag.propertyNo" disabled="disabled"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PaymentMethod" class="col-md-2 control-label">Payment Method</label>
+            <div class="col-md-10">
+                <select asp-for="PaymentMethod" class="form-control" asp-items="ViewBag.PaymentMeth"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label asp-for="Paid">Already paid</label>
+                <div class="checkbox">
+                    <input asp-for="Paid" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="RentStart" class="col-md-2 control-label">Rent start</label>
+            <div class="col-md-10">
+                <input asp-for="RentStart" class="form-control" type="date">
+                <span asp-validation-for="RentStart" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="RentFinish" class="col-md-2 control-label">Rent ends</label>
+            <div class="col-md-10">
+                <input asp-for="RentFinish" class="form-control" type="date">
+                <span asp-validation-for="RentFinish" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Rent" class="col-md-2 control-label">Rent cost</label>
+            <div class="col-md-10">
+                <input type="hidden" asp-for="Rent" value="@Model.Rent.ToString().Replace(",", ".")" />
+                <input class="form-control" value="@Model.Rent.ToString().Replace(",", ".")" disabled="disabled" />
+                <span asp-validation-for="Rent" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Deposit" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Deposit" class="form-control" />
+                <span asp-validation-for="Deposit" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ClientId" class="col-md-2 control-label">Client Passport</label>
+            <div class="col-md-10">
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.AllClients" value=" "></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Duration" class="col-md-2 control-label">Duration (days)</label>
+            <div class="col-md-10">
+                <input asp-for="Duration" class="form-control" />
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Conclude Contract" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-controller="PropertyForRents" asp-action="ValidPropertiesList">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
